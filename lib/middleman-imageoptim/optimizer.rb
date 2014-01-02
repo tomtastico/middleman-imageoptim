@@ -16,6 +16,10 @@ module Middleman
       def optimize!
         images_to_optimize = filter_file_paths(file_paths())
         optimizer.optimize_images(images_to_optimize) {|src_file, dst_file|
+          say_status 'source file:' 
+          say_status src_file
+          say_status 'dest_file:'
+          say_status dst_file
           if dst_file
             @total_savings += (src_file.size - dst_file.size)
             say_file_size_stats(src_file, dst_file)
@@ -27,9 +31,9 @@ module Middleman
         say_status "Total image savings: #{format_size(@total_savings)}"
       end
 
-      def filter_file_paths(paths)
+      def filter_file_paths(paths)		
         paths.select {|path|
-          is_image_extension(path.extname) && image_is_optimizable(path)
+          is_image_extension(path.extname) && image_is_new(path, path.sub(@app.inst.build_dir, @app.inst.source)) && image_is_optimizable(path)
         }
       end
 
@@ -39,6 +43,14 @@ module Middleman
 
       def image_is_optimizable(path)
         optimizer.optimizable?(path)
+      end
+      
+      def image_is_new(build, source)
+		FileUtils.uptodate? source, [build]
+      end
+
+      def image_is_new(path)
+
       end
 
       def size_change_word(size_src, size_dst)
