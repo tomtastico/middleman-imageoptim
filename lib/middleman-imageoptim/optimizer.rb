@@ -48,10 +48,7 @@ module Middleman
       def image_is_new(build, source)
 		FileUtils.uptodate? source, [build]
       end
-
-      def image_is_new(path)
-
-      end
+      
 
       def size_change_word(size_src, size_dst)
         size_difference = (size_src - size_dst)
