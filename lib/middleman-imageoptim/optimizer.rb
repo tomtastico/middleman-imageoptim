@@ -15,11 +15,7 @@ module Middleman
 
       def optimize!
         images_to_optimize = filter_file_paths(file_paths())
-        optimizer.optimize_images(images_to_optimize) {|src_file, dst_file|
-          say_status 'source file:' 
-          say_status src_file
-          say_status 'dest_file:'
-          say_status dst_file
+        optimizer.optimize_images(images_to_optimize) {|src_file, dst_file|          
           if dst_file
             @total_savings += (src_file.size - dst_file.size)
             say_file_size_stats(src_file, dst_file)
